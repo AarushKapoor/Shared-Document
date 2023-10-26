@@ -6,18 +6,29 @@ Created on Thu Oct 26 12:45:50 2023
 """
 
 import tkinter as tk
+import socket
 
-root = tk.Tk()
-root.title("Text Editor") 
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-text = tk.Text(root)
-text.pack()
+Port = 1234
 
-def save():
-    with open("doc.txt", "w") as f:
-        f.write(text.get("1.0", "end"))
+s.bind(('',Port))
+s.listen(20)
 
-button = tk.Button(root, text="Save", command=save)
-button.pack()
-
-root.mainloop()
+cs, addr = s.accept()
+print(addr)
+while True:
+    
+    # Recieving message from client
+    recievedMessage = cs.recv(2048).decode()
+    print('message:', recievedMessage)
+    if recievedMessage == 'end':
+        break
+        cs.close()
+    
+    # Sending message to client
+    reply = input('reply: ')
+    cs.send(bytes(reply, 'utf-8'))
+    if reply == 'end':
+        break
+        cs.close()
