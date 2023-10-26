@@ -7,3 +7,7 @@ Created on Thu Oct 26 12:45:50 2023
 
 import tkinter as tk
 
+window = tk.Tk()
+window.title("My Window")
+window.geometry("750x500")
+window.mainloop()
