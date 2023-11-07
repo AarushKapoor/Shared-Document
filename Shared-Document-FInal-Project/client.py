@@ -25,8 +25,9 @@ s.connect((Host, Port))
 
 root = tk.Tk()
 root.title("Client")
+root.geometry("400x400")  # Set a larger window size
 
-message_listbox = tk.Listbox(root, bg="white")
+message_listbox = tk.Listbox(root, bg="white", width=50, height=20)  # Larger text widget
 message_listbox.pack()
 
 message_entry = tk.Entry(root)
