@@ -38,6 +38,9 @@ root.title("Server")
 root.geometry("400x400")  # Set a larger window size
 
 message_listbox = tk.Listbox(root, bg="white", width=50, height=20)  # Larger text widget
+root.geometry("500x200")
+
+message_listbox = tk.Listbox(root, bg="white")
 message_listbox.pack()
 
 accept_thread = threading.Thread(target=accept_connections)

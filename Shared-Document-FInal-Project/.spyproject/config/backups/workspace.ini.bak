@@ -4,7 +4,11 @@ save_data_on_exit = True
 save_history = True
 save_non_project_files = False
 project_type = 'empty-project-type'
+<<<<<<< HEAD
+recent_files = ['server.py', 'client.py']
+=======
 recent_files = ['server.py', 'client.py', 'doc.txt']
+>>>>>>> d7f00a2d1d5ae37454e41613d832500e7bc6c8bd
 
 [main]
 version = 0.2.0

@@ -8,10 +8,12 @@ Client
 import tkinter as tk
 import socket
 
+
 def send_message():
     message = message_entry.get()
     s.sendall(message.encode())
     message_listbox.insert("end", f"Client: {message}")
+    message_listbox.geometry("500x200")
     if message == 'end':
         s.close()
         message_listbox.insert("end", "Connection closed")
