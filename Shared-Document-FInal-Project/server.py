@@ -6,41 +6,35 @@ Created on Thu Oct 26 12:45:50 2023
 Server
 """
 
-import tkinter as tk
 import socket
 import threading
 
-received_messages = []
+shared_document = ""  # Shared document content
 
-def accept_connections():
+def handle_client(client_socket):
+    global shared_document
     while True:
-        cs, addr = s.accept()
-        message_listbox.insert("end", f"Connected to {addr}")
-        threading.Thread(target=handle_client, args=(cs, addr)).start()
-
-def handle_client(client_socket, client_address):
-    while True:
-        received_message = client_socket.recv(2048).decode()
-        if received_message == 'end':
+        request = client_socket.recv(1024).decode()
+        if request == "pull":
+            client_socket.send(shared_document.encode())
+        elif request.startswith("save:"):
+            data = request.split(":", 1)[1]
+            shared_document = data
+            client_socket.send(b"Saved")
+        elif request == "exit":
             client_socket.close()
-            message_listbox.insert("end", f"Connection with {client_address} closed")
             break
-        received_messages.append(f"Client {client_address}: {received_message}")
-        message_listbox.insert("end", f"Client {client_address}: {received_message}")
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 Port = 1234
 s.bind(('', Port))
 s.listen(20)
 
-root = tk.Tk()
-root.title("Server")
+print("Server is listening for clients...")
 
-message_listbox = tk.Listbox(root, bg="white")
-message_listbox.pack()
+while True:
+    client_socket, addr = s.accept()
+    print(f"Accepted connection from {addr}")
+    client_handler = threading.Thread(target=handle_client, args=(client_socket,))
+    client_handler.start()
 
-accept_thread = threading.Thread(target=accept_connections)
-accept_thread.daemon = True
-accept_thread.start()
-
-root.mainloop()
