@@ -6,6 +6,7 @@ Created on Thu Oct 26 16:28:01 2023
 """
 import tkinter as tk
 import socket
+
 #while True:
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 Port = 1234
