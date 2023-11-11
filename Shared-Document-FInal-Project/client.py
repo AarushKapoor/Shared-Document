@@ -25,7 +25,7 @@ def save_document():
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 Port = 1234
-Host = socket.gethostname()
+Host = "10.220.45.216"
 s.connect((Host, Port))
 
 root = tk.Tk()
