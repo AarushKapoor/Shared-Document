@@ -23,6 +23,13 @@ def save_document():
     if response == "Saved":
         print("Document saved on the server")
 
+def download_document():
+    global shared_document
+    file_path = "downloaded_document.txt"
+    with open(file_path, "w") as file:
+        file.write(shared_document)
+    print(f"Document downloaded as {file_path}")
+
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 Port = 1234
 Host = "10.220.45.216"
@@ -39,6 +46,9 @@ pull_button.pack()
 
 save_button = tk.Button(root, text="Save", command=save_document)
 save_button.pack()
+
+download_button = tk.Button(root, text="Download", command=download_document)
+download_button.pack()
 
 client_socket = s
 
