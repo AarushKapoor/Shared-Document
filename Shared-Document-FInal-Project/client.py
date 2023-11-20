@@ -29,6 +29,7 @@ def download_document():
     with open(file_path, "w") as file:
         file.write(shared_document)
     print(f"Document downloaded as {file_path}")
+    
 
 def make_text_bold():
     current_tags = text.tag_names("sel.first")
