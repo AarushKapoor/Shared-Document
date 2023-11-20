@@ -32,7 +32,7 @@ def handle_client(client_socket):
             client_socket.close()
             break
 
-# Set up the server socket and begin listening to the client
+# Set up a socket and begin listening to the client
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 Port = 1234
 s.bind(('', Port))
