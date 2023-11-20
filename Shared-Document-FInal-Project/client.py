@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Oct 26 16:28:01 2023
-
-@authors: Aarush Kapoor, Jenny Li Wang, Ayman Ali
-Client
-"""
 import tkinter as tk
 import socket
 
