@@ -8,13 +8,6 @@ Client
 import tkinter as tk
 import socket
 
-def pull_document():
-    global shared_document
-    client_socket.send(b"pull")
-    shared_document = client_socket.recv(4096).decode()
-    text.delete("1.0", "end")
-    text.insert("1.0", shared_document)
-
 def save_document():
     global shared_document
     shared_document = text.get("1.0", "end")
@@ -23,13 +16,19 @@ def save_document():
     if response == "Saved":
         print("Document saved on the server")
 
+def pull_document():
+    global shared_document
+    client_socket.send(b"pull")
+    shared_document = client_socket.recv(4096).decode()
+    text.delete("1.0", "end")
+    text.insert("1.0", shared_document)
+
 def download_document():
     global shared_document
     file_path = "downloaded_document.txt"
     with open(file_path, "w") as file:
         file.write(shared_document)
     print(f"Document downloaded as {file_path}")
-    
 
 def make_text_bold():
     current_tags = text.tag_names("sel.first")
@@ -55,18 +54,11 @@ def make_text_underlined():
         text.tag_add("underline", "sel.first", "sel.last")
         text.tag_configure("underline", underline=True)
 
-def change_font_size(event=None):
-    global font_size
-    try:
-        new_size = float(font_size_var.get())
-        if new_size > 0:
-            font_size = new_size
-            text.configure(font=(font_family, font_size))
-    except ValueError:
-        pass  # Ignore if the user enters a non-numeric value
+def add_bullet_point():
+    text.insert(tk.INSERT, "\u2022 ")  # Unicode character for bullet point
 
 # Set default font family and font size
-font_family = "Helvetica"
+font_family = "Times New Roman"
 font_size = 10
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -82,10 +74,10 @@ button_frame = tk.Frame(root)
 button_frame.pack(side="top", fill="x")
 
 # Buttons for actions
-pull_button = tk.Button(button_frame, text="Pull", command=pull_document)
+pull_button = tk.Button(button_frame, text="Save", command=save_document)
 pull_button.pack(side="left")
 
-save_button = tk.Button(button_frame, text="Save", command=save_document)
+save_button = tk.Button(button_frame, text="Pull", command=pull_document)
 save_button.pack(side="left")
 
 download_button = tk.Button(button_frame, text="Download", command=download_document)
@@ -100,21 +92,13 @@ italic_button.pack(side="left")
 underline_button = tk.Button(button_frame, text="Underline", command=make_text_underlined)
 underline_button.pack(side="left")
 
-# Font size entry
-font_size_label = tk.Label(button_frame, text="Font Size:")
-font_size_label.pack(side="left")
-
-font_size_var = tk.StringVar()
-font_size_var.set(str(font_size))
-font_size_entry = tk.Entry(button_frame, textvariable=font_size_var)
-font_size_entry.pack(side="left")
-font_size_entry.bind("<Return>", change_font_size)
+bullet_button = tk.Button(button_frame, text="Bullet Point", command=add_bullet_point)
+bullet_button.pack(side="left")
 
 # Text widget for document content
-text = tk.Text(root, wrap="word", width=40, height=15, font=(font_family, font_size))
+text = tk.Text(root, wrap="word", width=80, height=40, font=(font_family, font_size))
 text.pack()
 
 client_socket = s
 
 root.mainloop()
-
