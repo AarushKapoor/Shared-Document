@@ -29,6 +29,11 @@ def download_document():
     with open(file_path, "w") as file:
         file.write(shared_document)
     print(f"Document downloaded as {file_path}")
+    
+def change_font_size(slider_value):
+    global text
+    new_font_size = int(slider_value)
+    text.config(font=("Arial", new_font_size))
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 Port = 1234
@@ -49,6 +54,9 @@ save_button.pack()
 
 download_button = tk.Button(root, text="Download", command=download_document)
 download_button.pack()
+
+font_size_scale = tk.Scale(root, from_=8, to=24, orient=tk.HORIZONTAL, label="Font Size", command=change_font_size)
+font_size_scale.pack()
 
 client_socket = s
 
