@@ -54,19 +54,11 @@ def make_text_underlined():
     else:
         text.tag_add("underline", "sel.first", "sel.last")
         text.tag_configure("underline", underline=True)
+        
 
-def change_font_size(event=None):
-    global font_size
-    try:
-        new_size = float(font_size_var.get())
-        if new_size > 0:
-            font_size = new_size
-            text.configure(font=(font_family, font_size))
-    except ValueError:
-        pass  # Ignore if the user enters a non-numeric value
 
 # Set default font family and font size
-font_family = "Helvetica"
+font_family = "Times New Roman"
 font_size = 10
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -100,21 +92,13 @@ italic_button.pack(side="left")
 underline_button = tk.Button(button_frame, text="Underline", command=make_text_underlined)
 underline_button.pack(side="left")
 
-# Font size entry
-font_size_label = tk.Label(button_frame, text="Font Size:")
-font_size_label.pack(side="left")
 
-font_size_var = tk.StringVar()
-font_size_var.set(str(font_size))
-font_size_entry = tk.Entry(button_frame, textvariable=font_size_var)
-font_size_entry.pack(side="left")
-font_size_entry.bind("<Return>", change_font_size)
 
 # Text widget for document content
 text = tk.Text(root, wrap="word", width=80, height=40, font=(font_family, font_size))
 text.pack()
 
+
 client_socket = s
 
 root.mainloop()
-
