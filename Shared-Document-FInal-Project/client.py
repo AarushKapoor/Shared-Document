@@ -111,7 +111,7 @@ font_size_entry.pack(side="left")
 font_size_entry.bind("<Return>", change_font_size)
 
 # Text widget for document content
-text = tk.Text(root, wrap="word", width=40, height=15, font=(font_family, font_size))
+text = tk.Text(root, wrap="word", width=80, height=40, font=(font_family, font_size))
 text.pack()
 
 client_socket = s
