@@ -57,10 +57,26 @@ def make_text_underlined():
 
 def add_bullet_point():
     text.insert(tk.INSERT, "\u2022 ")  # Unicode character for bullet point
-
+    
+def highlight_text():
+    try:
+        start_pos = text.index("sel.first")
+        end_pos = text.index("sel.last")
+        if "highlight" in text.tag_names(start_pos):
+            text.tag_remove("highlight", start_pos, end_pos)
+        else:
+            text.tag_add("highlight", start_pos, end_pos)
+            text.tag_configure("highlight", background="yellow")
+    except tk.TclError:
+        pass
+    
+def change_text_color(color):
+    text.config(foreground=color)
+    color_menu_button.config(text=color)
+    
 # Set default font family and font size
 font_family = "Times New Roman"
-font_size = 10
+font_size = 12
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 Port = 1234
@@ -95,6 +111,30 @@ underline_button.pack(side="left")
 
 bullet_button = tk.Button(button_frame, text="Bullet Point", command=add_bullet_point)
 bullet_button.pack(side="left")
+
+# Highlighter button
+highlight_button = tk.Button(button_frame, text="Highlight", command=highlight_text)
+highlight_button.pack(side="left")
+
+# Dropdown menu for text color selection (Custom dropdown)
+color_label = tk.Label(button_frame, text="Text Color:")
+color_label.pack(side="left")
+
+selected_color = tk.StringVar(root)
+selected_color.set("Black")  # Default color
+
+color_options = ["Black", "Red", "Green", "Blue", "Cyan", 
+                 "Yellow", "Orange", "Pink", "Gray"]  # Additional basic color options
+
+color_menu_button = tk.Menubutton(button_frame, text="Black", relief="raised", direction="below")
+color_menu_button.pack(side="left")
+
+color_menu = tk.Menu(color_menu_button, tearoff=False)
+color_menu_button.config(menu=color_menu)
+
+for color in color_options:
+    color_menu.add_command(label=color, command=lambda c=color: change_text_color(c))
+    
 
 # Text widget for document content
 text = tk.Text(root, wrap="word", width=80, height=40, font=(font_family, font_size))
