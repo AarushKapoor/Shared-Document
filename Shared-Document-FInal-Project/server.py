@@ -13,8 +13,10 @@ shared_document = ""  # Shared document content
 
 # Function that handles communication with the client
 def handle_client(client_socket):
+    # Access the global variable shared_document
     global shared_document
     while True:
+        # Receive request from client and decode it
         request = client_socket.recv(1024).decode()
         #If client request to pull the document
         if request == "pull":

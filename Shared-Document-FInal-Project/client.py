@@ -11,75 +11,112 @@ import socket
 
 # Function to save the documetn on the server
 def save_document():
+    # Access the global variable shared_document
     global shared_document
     shared_document = text.get("1.0", "end")
+    # Send the document to the server and encode it
     client_socket.send(f"save:{shared_document}".encode())
+    # Receive acknoledgement from the server and decode it
     response = client_socket.recv(1024).decode()
+    # If server's respond is "Saved," print a message indicating that it was successfully saved
     if response == "Saved":
         print("Document saved on the server")
 
 #Function to pull the document from the server
 def pull_document():
+    # Access the global variable shared_document
     global shared_document
+    # Send to server a request to pull the document
     client_socket.send(b"pull")
+    # Receive the updated document content from server and decode it
     shared_document = client_socket.recv(4096).decode()
+    # Clear the cotent of the text widget
     text.delete("1.0", "end")
+    # Inset/open the pulled document into the text widget
     text.insert("1.0", shared_document)
 
 # Function to download the document as ".txt" file
 def download_document():
+    # Access the global variable shared_document
     global shared_document
     file_path = "downloaded_document.txt"
-    with open(file_path, "w") as file:
+    with open(file_path, "wb") as file:
+        # Write the shared document content into the file
         file.write(shared_document)
-    print(f"Document downloaded as {file_path}")
+    print(f"Document downloaded as {file_path}") # Successful download message
 
 # Function to bold text or remove the bold
 def make_text_bold():
+    # Retrieve the existing text formatting for the selected text
     current_tags = text.tag_names("sel.first")
+    # If text is already in bold
     if "bold" in current_tags:
+        # Remove the bold formatting
         text.tag_remove("bold", "sel.first", "sel.last")
+    # If not applied
     else:
+        # Apply bold formatting
         text.tag_add("bold", "sel.first", "sel.last")
         text.tag_configure("bold", font=(font_name, font_size, "bold"))
 
 # Function to make text italic
 def make_text_italic():
+    # Retrieve the existing text formatting for the selected text
     current_tags = text.tag_names("sel.first")
+    # If text is already in italic
     if "italic" in current_tags:
+        # Remove the italic formatting
         text.tag_remove("italic", "sel.first", "sel.last")
+    # If not applied
     else:
+        # Apply italic formatting
         text.tag_add("italic", "sel.first", "sel.last")
         text.tag_configure("italic", font=(font_name, font_size, "italic"))
 
 # Function to underline text or remove the underline
 def make_text_underlined():
+    # Retrieve the existing text formatting for the selected text
     current_tags = text.tag_names("sel.first")
+    # If text is already underlined
     if "underline" in current_tags:
+        # Remove underline formatting
         text.tag_remove("underline", "sel.first", "sel.last")
+    # If not applied
     else:
+        # Apply underline formatting
         text.tag_add("underline", "sel.first", "sel.last")
         text.tag_configure("underline", underline=True)
 
 # Function to add bullet points
 def add_bullet_point():
-    text.insert(tk.INSERT, "\u2022 ")  # Unicode character for bullet point
+    # Insert bullet point at the current position of the cursor
+    text.insert(tk.INSERT, "\u2022 ")
 
+# Used chatGPT 3.5 for the highlight_text() function
 # Function to highlight specific text or remove highlight    
 def highlight_text():
     try:
+        # Retrieves the beginning and ending position of the selected text to highlight
         start_pos = text.index("sel.first")
         end_pos = text.index("sel.last")
+        # If text is already highlighted
         if "highlight" in text.tag_names(start_pos):
+            # Remove the highlight 
             text.tag_remove("highlight", start_pos, end_pos)
+        # If not applied
         else:
+            # Add yellow highlight to the selected text
             text.tag_add("highlight", start_pos, end_pos)
             text.tag_configure("highlight", background="yellow")
+    # If no text is selected, then ignore this error and continue running the program
     except tk.TclError:
         pass
-    
+
+# Function to change the text color
 def change_text_color(color):
+    # Change the text color to the color that the client chose
     text.config(foreground=color)
+    # Update the displayed text on the  text color menu to the color that the client chose
     color_menu_button.config(text=color)
     
 # Set default font and font size
@@ -100,7 +137,6 @@ button_frame = tk.Frame(root)
 button_frame.pack(side="top", fill="x")
 
 # Buttons for actions
-
 # Save button to save the document to the server
 pull_button = tk.Button(button_frame, text="Save", command=save_document)
 pull_button.pack(side="left")
@@ -133,6 +169,7 @@ bullet_button.pack(side="left")
 highlight_button = tk.Button(button_frame, text="Highlight", command=highlight_text)
 highlight_button.pack(side="left")
 
+#Used chatGPT 3.5 to create the dropdown menu for the text color change option
 # Dropdown menu for text color selection
 
 # Name label of each color option to change text color
@@ -166,4 +203,4 @@ text.pack() # Pack the text widget into the root window
 
 client_socket = s   # Client socket
 
-root.mainloop()
+root.mainloop() # Start the main loop for the GUI, and handles user interactions
