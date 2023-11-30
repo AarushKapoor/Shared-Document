@@ -40,7 +40,7 @@ def download_document():
     # Access the global variable shared_document
     global shared_document
     file_path = "downloaded_document.txt"
-    with open(file_path, "wb") as file:
+    with open(file_path, "w") as file:
         # Write the shared document content into the file
         file.write(shared_document)
     print(f"Document downloaded as {file_path}") # Successful download message
@@ -126,7 +126,7 @@ font_size = 12
 # Connection setup
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 Port = 1234
-Host = "10.220.45.216"
+Host = "10.220.43.245"
 s.connect((Host, Port))
 
 root = tk.Tk()  # GUI window
